@@ -32,5 +32,8 @@ jobs:
       - name: Lint (Stylelint)
         run: pnpm lint:style
 
+      - name: Component tests
+        run: pnpm test
+
       - name: Build playground
         run: pnpm build
