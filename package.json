@@ -8,9 +8,11 @@
   "main": "./nuxt.config.ts",
   "files": [
     "app",
-    "nuxt.config.ts"
+    "nuxt.config.ts",
+    "tokens"
   ],
   "scripts": {
+    "build:tokens": "node scripts/build-tokens.mjs",
     "dev": "nuxt dev playground",
     "build": "nuxt build playground",
     "generate": "nuxt generate playground",
@@ -28,9 +30,11 @@
     "eslint": "^9.0.0",
     "nuxt": "^4.4.8",
     "postcss-html": "^1.8.0",
+    "style-dictionary": "^5.5.0",
     "stylelint": "^17.14.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.0",
+    "utopia-core": "^1.6.0",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0"
   },

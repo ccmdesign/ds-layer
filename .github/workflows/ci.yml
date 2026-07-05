@@ -21,6 +21,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Tokens deterministic and committed
+        run: |
+          pnpm build:tokens
+          git diff --exit-code -- tokens app/assets/css/tokens.css
+
       - name: Lint (ESLint)
         run: pnpm lint
 

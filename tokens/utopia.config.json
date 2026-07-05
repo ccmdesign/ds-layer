@@ -1,0 +1,21 @@
+{
+  "$description": "Utopia fluid scale parameters — the single source for the generated tokens/type.tokens.json and tokens/space.tokens.json (see scripts/build-tokens.mjs). Viewport range matches the PRO-228 acceptance criteria (360-1240px).",
+  "type": {
+    "minWidth": 360,
+    "maxWidth": 1240,
+    "minFontSize": 16,
+    "maxFontSize": 18,
+    "minTypeScale": 1.2,
+    "maxTypeScale": 1.25,
+    "negativeSteps": 2,
+    "positiveSteps": 5
+  },
+  "space": {
+    "minWidth": 360,
+    "maxWidth": 1240,
+    "minSize": 16,
+    "maxSize": 18,
+    "negativeSteps": [0.75, 0.5, 0.25],
+    "positiveSteps": [1.5, 2, 3, 4, 6]
+  }
+}

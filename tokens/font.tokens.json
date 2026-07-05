@@ -1,0 +1,9 @@
+{
+  "font": {
+    "$description": "Font stacks seeded from Social House (app/assets/css/brand.css). The layer ships the stack token; @nuxt/fonts (bundled with Nuxt UI) resolves the Satoshi family from --font-sans at build time and self-hosts it, so consumers need no extra font wiring.",
+    "sans": {
+      "$value": "'Satoshi', ui-sans-serif, system-ui, sans-serif",
+      "$type": "fontFamily"
+    }
+  }
+}

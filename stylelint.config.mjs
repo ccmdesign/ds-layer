@@ -6,6 +6,9 @@ export default {
     '**/.nuxt/**',
     '**/.output/**',
     '**/dist/**',
+    // Generated from tokens/ by scripts/build-tokens.mjs; Utopia names like
+    // --text-step--2 are intentional and trip custom-property-pattern.
+    'app/assets/css/tokens.css',
   ],
   overrides: [
     {

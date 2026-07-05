@@ -1,0 +1,22 @@
+{
+  "radius": {
+    "$description": "Radius scale. Steps stay Tailwind-compatible so rounded-* utilities render exactly like Social House today; radius.full covers its pill language (badges, avatars).",
+    "xs": { "$value": "0.125rem", "$type": "dimension" },
+    "sm": { "$value": "0.25rem", "$type": "dimension" },
+    "md": { "$value": "0.375rem", "$type": "dimension" },
+    "lg": { "$value": "0.5rem", "$type": "dimension" },
+    "xl": { "$value": "0.75rem", "$type": "dimension" },
+    "2xl": { "$value": "1rem", "$type": "dimension" },
+    "3xl": { "$value": "1.5rem", "$type": "dimension" },
+    "4xl": { "$value": "2rem", "$type": "dimension" },
+    "full": { "$value": "9999px", "$type": "dimension" }
+  },
+  "ui": {
+    "$description": "Nuxt UI semantic seeds, emitted into :root (not @theme). --ui-radius drives Nuxt UI component rounding; 0.25rem matches what Social House actually renders with (Nuxt UI default).",
+    "radius": {
+      "$value": "{radius.sm}",
+      "$type": "dimension",
+      "$extensions": { "ccm.scope": "root" }
+    }
+  }
+}
