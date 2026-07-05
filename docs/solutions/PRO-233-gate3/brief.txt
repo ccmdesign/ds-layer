@@ -1,0 +1,17 @@
+Build a new page at /review in this Nuxt app.
+
+It is the review screen for a social-media planning tool:
+
+1. A "Schedule a post" form: labeled fields for post title (text), caption (multiline, required, max 280 characters with a live counter), channel (select: Instagram, LinkedIn, YouTube, TikTok), and publish date (required). Submitting with invalid fields must show inline error messages.
+2. Submitting a valid form opens a confirmation modal that summarizes what will be scheduled, with Confirm and Cancel actions. Confirm resets the form and shows a success notification.
+3. Below the form, a "Planned posts" section: a responsive card grid of these six posts (static data in the page is fine):
+   - "Spring launch teaser" — Instagram — scheduled — 2026-07-08
+   - "Founder AMA recap" — LinkedIn — draft — 2026-07-10
+   - "Behind the scenes reel" — Instagram — scheduled — 2026-07-12
+   - "Product demo short" — YouTube — review — 2026-07-14
+   - "Hiring: design engineer" — LinkedIn — published — 2026-06-30
+   - "Community spotlight" — TikTok — scheduled — 2026-07-18
+   Each card shows title, channel, status, and a human-readable date.
+4. The page must look right in both light and dark mode.
+
+Only create or edit files inside this app directory (spikes/spike-app). When you consider the work done, print DONE as the last line.
