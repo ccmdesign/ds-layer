@@ -48,3 +48,13 @@ jobs:
 
       - name: Build playground
         run: pnpm build
+
+      # PRO-233 regression fixtures: the validation-spike consuming apps.
+      - name: Build spike app (fresh consuming app)
+        run: pnpm build:spike
+
+      - name: Install docus-coexist (own lockfile — docus is not a layer dep)
+        run: pnpm --dir spikes/docus-coexist install --frozen-lockfile
+
+      - name: Build docus-coexist (layer + docus, Social House configuration)
+        run: pnpm --dir spikes/docus-coexist build
