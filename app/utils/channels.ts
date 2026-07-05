@@ -83,7 +83,11 @@ function normalizeChannel(channel: string | null | undefined): string {
 /** Strictly resolve a channel: canonical entry or undefined. */
 export function resolveChannel(channel: string | null | undefined): ChannelInfo | undefined {
   const key = normalizeChannel(channel)
-  const id = key in CHANNELS ? (key as ChannelId) : CHANNEL_ALIASES[key]
+  // Object.hasOwn (not `in`/bare indexing): prototype-chain keys like
+  // 'constructor' must not resolve to junk on these plain-object registries.
+  const id = Object.hasOwn(CHANNELS, key)
+    ? (key as ChannelId)
+    : Object.hasOwn(CHANNEL_ALIASES, key) ? CHANNEL_ALIASES[key] : undefined
   return id ? CHANNELS[id] : undefined
 }
 

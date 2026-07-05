@@ -71,7 +71,9 @@ export function normalizeStatus(status: string | null | undefined): string {
 
 function asStatusId(status: string | null | undefined): StatusId | undefined {
   const key = normalizeStatus(status)
-  return key in STATUS_COLORS ? (key as StatusId) : undefined
+  // Object.hasOwn (not `in`): prototype-chain keys like 'constructor' must
+  // not pass the registry check.
+  return Object.hasOwn(STATUS_COLORS, key) ? (key as StatusId) : undefined
 }
 
 /** Semantic badge color for a status; unknown/absent -> 'neutral'. */
@@ -88,7 +90,7 @@ export function statusLabel(status: string | null | undefined, locale: string = 
   const id = asStatusId(status)
   if (!id) return (status ?? '').trim()
   const lang = locale.slice(0, 2).toLowerCase()
-  const messages = lang in STATUS_MESSAGES ? STATUS_MESSAGES[lang as keyof typeof STATUS_MESSAGES] : STATUS_MESSAGES.en
+  const messages = Object.hasOwn(STATUS_MESSAGES, lang) ? STATUS_MESSAGES[lang as keyof typeof STATUS_MESSAGES] : STATUS_MESSAGES.en
   return messages[id]
 }
 

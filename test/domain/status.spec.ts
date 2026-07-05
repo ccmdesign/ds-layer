@@ -37,6 +37,11 @@ describe('status color map', () => {
     expect(statusColor('')).toBe('neutral')
   })
 
+  it('does not leak prototype-chain keys from the plain-object map', () => {
+    expect(statusColor('constructor')).toBe('neutral')
+    expect(statusLabel('constructor')).toBe('constructor')
+  })
+
   it('has a color and both locale labels for every status id', () => {
     for (const id of statusIds()) {
       expect(STATUS_COLORS[id]).toMatch(/^(success|info|warning|error|neutral)$/)

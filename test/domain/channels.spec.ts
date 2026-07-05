@@ -60,6 +60,12 @@ describe('channel registry', () => {
     expect(resolveChannel('')).toBeUndefined()
   })
 
+  it('does not leak prototype-chain keys from the plain-object registry', () => {
+    expect(resolveChannel('constructor')).toBeUndefined()
+    expect(resolveChannel('toString')).toBeUndefined()
+    expect(channelBrand('constructor').id).toBeNull()
+  })
+
   it('falls back to a neutral identity echoing the input (no hardcoded label)', () => {
     const unknown = channelBrand('myspace')
     expect(unknown.id).toBeNull()
