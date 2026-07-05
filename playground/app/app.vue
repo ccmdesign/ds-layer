@@ -8,6 +8,9 @@
         <NuxtLink to="/tokens" class="text-muted hover:text-highlighted">
           Tokens
         </NuxtLink>
+        <NuxtLink to="/composition" class="text-muted hover:text-highlighted">
+          Composition
+        </NuxtLink>
       </nav>
     </header>
     <NuxtPage />

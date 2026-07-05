@@ -1,9 +1,11 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "./tokens.css";
+@import "./composition.css" layer(components);
 
 /*
  * @ccm/ds layer stylesheet.
  * tokens.css is GENERATED from the DTCG source in tokens/ (pnpm build:tokens).
- * Every Layout composition styles land in PRO-229.
+ * composition.css holds the Every Layout primitives (PRO-229), registered in
+ * Tailwind v4's components cascade layer via the layer() import above.
  */
