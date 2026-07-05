@@ -17,7 +17,7 @@
     "preview": "nuxt preview playground",
     "lint": "eslint .",
     "lint:style": "stylelint \"**/*.{css,vue}\" --allow-empty-input",
-    "postinstall": "nuxt prepare playground"
+    "dev:prepare": "nuxt prepare playground"
   },
   "dependencies": {
     "@nuxt/ui": "^4.9.0",

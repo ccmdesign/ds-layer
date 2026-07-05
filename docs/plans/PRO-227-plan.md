@@ -30,7 +30,7 @@ ds-layer/
 └── README.md                 # + one-paragraph architecture summary linking the Decisions doc
 ```
 
-Layer CSS is registered with `createResolver(import.meta.url)` so paths survive being consumed from another project — the pattern the future token/component items (PRO-228/229) will reuse.
+Layer CSS is registered with paths resolved relative to the layer file (`fileURLToPath(import.meta.url)` + `join`, avoiding an `@nuxt/kit` import) so paths survive being consumed from another project — the pattern the future token/component items (PRO-228/229) will reuse.
 
 ## Steps
 

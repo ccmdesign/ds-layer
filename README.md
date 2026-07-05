@@ -9,7 +9,8 @@ The repo root **is** the layer: `nuxt.config.ts` registers Nuxt UI v4 (which bri
 ## Quickstart
 
 ```bash
-pnpm install     # also runs `nuxt prepare playground`
+pnpm install
+pnpm dev:prepare # optional: generate playground types for the IDE
 pnpm dev         # playground on http://localhost:3000 — renders a Nuxt UI button
 pnpm lint        # ESLint
 pnpm lint:style  # Stylelint
