@@ -13,7 +13,7 @@ const primitives = [
 </script>
 
 <template>
-  <main class="mx-auto flex max-w-4xl flex-col gap-l px-4 py-l">
+  <CcmStack as="main" space="l" class="mx-auto max-w-4xl px-4 py-l">
     <header class="flex flex-col gap-2">
       <h1 class="text-step-3 font-semibold">
         Composition primitives
@@ -33,5 +33,5 @@ const primitives = [
         <span class="text-muted"> — {{ p.blurb }}</span>
       </li>
     </ul>
-  </main>
+  </CcmStack>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <main class="mx-auto flex max-w-4xl flex-col gap-l px-4 py-l">
+  <CcmStack as="main" space="l" class="mx-auto max-w-4xl px-4 py-l">
     <h1 class="text-step-3 font-semibold">
       Grid
     </h1>
@@ -40,5 +40,5 @@
         </div>
       </CcmGrid>
     </section>
-  </main>
+  </CcmStack>
 </template>

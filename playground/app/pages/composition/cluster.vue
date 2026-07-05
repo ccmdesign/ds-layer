@@ -3,7 +3,7 @@ const tags = ['layout', 'css', 'design tokens', 'utopia', 'every layout', 'nuxt'
 </script>
 
 <template>
-  <main class="mx-auto flex max-w-4xl flex-col gap-l px-4 py-l">
+  <CcmStack as="main" space="l" class="mx-auto max-w-4xl px-4 py-l">
     <h1 class="text-step-3 font-semibold">
       Cluster
     </h1>
@@ -36,5 +36,5 @@ const tags = ['layout', 'css', 'design tokens', 'utopia', 'every layout', 'nuxt'
         <span class="bg-elevated rounded-md px-3 py-1">short item</span>
       </CcmCluster>
     </section>
-  </main>
+  </CcmStack>
 </template>

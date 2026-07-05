@@ -7,13 +7,19 @@
   "repository": "github:ccmdesign/ds-layer",
   "main": "./nuxt.config.ts",
   "files": [
+    "AGENTS.md",
     "app",
+    "lint",
+    "llms.txt",
     "manifest.json",
     "nuxt.config.ts",
+    "skills",
     "tokens"
   ],
   "scripts": {
     "build:tokens": "node scripts/build-tokens.mjs",
+    "build:llms": "node scripts/build-llms.mjs",
+    "manifest:check": "node scripts/check-manifest.mjs",
     "dev": "nuxt dev playground",
     "build": "nuxt build playground",
     "generate": "nuxt generate playground",
@@ -21,6 +27,7 @@
     "lint": "eslint .",
     "lint:style": "stylelint \"**/*.{css,vue}\" --allow-empty-input",
     "test": "nuxt prepare playground && vitest run",
+    "test:lint": "nuxt prepare playground && vitest run test/lint",
     "dev:prepare": "nuxt prepare playground"
   },
   "dependencies": {

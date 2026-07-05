@@ -1,61 +1,196 @@
 {
-  "$comment": "DS-6 stub (created by PRO-231): the component/export manifest for agent consumers. DS-6 owns the final schema — adopt or migrate these entries. `kind` is one of component | composable | util | data.",
-  "schema": "ds-6-draft",
+  "$comment": "Machine-readable component manifest for agent consumers (DS-6, PRO-232; grew the PRO-231 ds-6-draft stub in place). Validated by scripts/check-manifest.mjs (pnpm manifest:check); llms.txt is GENERATED from this file by scripts/build-llms.mjs (pnpm build:llms) — edit here, then regenerate. `kind` is one of component | composable | util | data | skip. `skip` entries are Every Layout primitives the layer deliberately does NOT ship, so agents that know the book don't reintroduce them.",
+  "schema": "ccm-ds/manifest@1",
+  "name": "@ccm/ds",
+  "description": "CCM design-system Nuxt layer: Nuxt UI v4 + Utopia fluid tokens + Every Layout composition components + domain foundations.",
+  "doctrine": [
+    "Pages compose components — a page file wires existing Nuxt UI and Ccm components together; it does not build widgets or layouts out of raw markup and utility soup.",
+    "Class strings live only inside Tailwind Variants definitions (component files). Outside components/, class attributes are budgeted by lint (ccm/class-budget); pass props, not classes.",
+    "Nuxt UI is restyled through app.config.ts (`ui` key) only — never inline :ui props, never scattered CSS overrides.",
+    "ccm-layer CSS is plain CSS written on the design tokens (var(--spacing-*), var(--text-step-*), var(--color-*)) — no raw hex, no raw px (Stylelint enforces this).",
+    "@apply is reserved for prose/markdown styling — never use it to build components."
+  ],
   "entries": [
     {
-      "name": "channels",
-      "kind": "util",
-      "path": "app/utils/channels.ts",
-      "description": "Social-channel registry: {label, brandColor, fg, monochrome, icon} per platform (8: instagram, linkedin, x, facebook, youtube, tiktok, google_my_business, bluesky) + resolveChannel/channelBrand/channelIds. Sole home of brand hex (sanctioned token exception).",
-      "since": "PRO-231"
+      "name": "CcmStack",
+      "kind": "component",
+      "path": "app/components/CcmStack.vue",
+      "description": "Every Layout Stack (ch. 01): injects block-start margins between stacked siblings via the owl selector — spacing belongs to the context, not the elements.",
+      "whenToUse": "Vertical rhythm between any run of siblings: page sections, form fields, article flow. Reach for this instead of `flex flex-col gap-*` outside components/.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token between siblings." },
+        { "name": "recursive", "type": "boolean", "default": false, "description": "Apply the spacing at any nesting depth, not only to direct children." },
+        { "name": "splitAfter", "type": "number (1-5)", "default": null, "description": "Push everything after the nth child to the block-end edge (auto margin). Invalid values are ignored with a console warning." }
+      ],
+      "variants": { "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "The stacked children." }],
+      "antiPatterns": [
+        "Adding vertical margins to the children — the Stack owns the spacing.",
+        "Rebuilding it as `flex flex-col gap-*` in a page — compose CcmStack instead.",
+        "splitAfter outside 1-5 — the CSS only enumerates five positions."
+      ],
+      "since": "PRO-229"
     },
     {
-      "name": "status",
-      "kind": "util",
-      "path": "app/utils/status.ts",
-      "description": "Status conventions: STATUS_COLORS map (status id -> semantic color: success/info/warning/error/neutral) as the single badge-coloring mechanism, plus EN/PT label dictionaries (STATUS_MESSAGES), statusColor/statusLabel/statusLabelKey/normalizeStatus/statusIds.",
-      "since": "PRO-231"
+      "name": "CcmCluster",
+      "kind": "component",
+      "path": "app/components/CcmCluster.vue",
+      "description": "Every Layout Cluster (ch. 04): a wrapping flex row for groups of variable-length items spaced with gap.",
+      "whenToUse": "Tag lists, button groups, nav links, metadata rows — anything that should wrap naturally when it runs out of inline space.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." },
+        { "name": "justify", "type": "string (CSS justify-content)", "default": "flex-start", "description": "CSS justify-content value." },
+        { "name": "align", "type": "string (CSS align-items)", "default": "flex-start", "description": "CSS align-items value." }
+      ],
+      "variants": { "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "The clustered items." }],
+      "antiPatterns": [
+        "Single-file horizontal scroll strips — that is CcmReel.",
+        "Two-pane layouts that should switch orientation at a width — that is CcmSwitcher."
+      ],
+      "since": "PRO-229"
     },
     {
-      "name": "formatDate",
-      "kind": "util",
-      "path": "app/utils/format-date.ts",
-      "description": "Locale-aware, UTC-stable date formatter (Intl-based, no date-fns). formatDate(value, { locale, style }) — defensive: empty -> '', unparseable strings pass through.",
-      "since": "PRO-231"
+      "name": "CcmGrid",
+      "kind": "component",
+      "path": "app/components/CcmGrid.vue",
+      "description": "Every Layout Grid (ch. 08): auto-filling column grid via `minmax(min(<min>, 100%), 1fr)` — container-intrinsic in pure CSS, single column below the minimum, no media queries.",
+      "whenToUse": "Card grids and galleries where the column count should follow the container, not viewport breakpoints.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "min", "type": "string (CSS length)", "default": "calc(var(--measure) / 3)", "description": "Minimum column width; default set in CSS to a third of the measure." },
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." }
+      ],
+      "variants": { "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "The grid cells." }],
+      "antiPatterns": [
+        "Fixed column counts (`grid-cols-3` + breakpoint variants) for content that should be container-intrinsic.",
+        "Passing a token name as `min` — it takes a CSS length (e.g. '15rem'), not a SpaceToken."
+      ],
+      "since": "PRO-229"
     },
     {
-      "name": "copyToClipboard",
-      "kind": "util",
-      "path": "app/utils/clipboard.ts",
-      "description": "Framework-agnostic clipboard write: navigator.clipboard with hidden-textarea/execCommand fallback. Never throws; resolves boolean.",
-      "since": "PRO-231"
+      "name": "CcmReel",
+      "kind": "component",
+      "path": "app/components/CcmReel.vue",
+      "description": "Every Layout Reel (ch. 10): a single-file flex row that scrolls horizontally on overflow with native scrollbar affordance. No JavaScript.",
+      "whenToUse": "Browsable strips — card rows, image rails, slidable link bars — where native continuous scrolling is the whole interaction.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "space", "type": "SpaceToken", "default": "s", "description": "Utopia space token between items." },
+        { "name": "itemWidth", "type": "string (CSS width)", "default": "auto", "description": "Width for each item; 'auto' leaves items their intrinsic width." },
+        { "name": "height", "type": "string (CSS block-size)", "default": "auto", "description": "Block-size for the reel; 'auto' tracks the tallest item." },
+        { "name": "noBar", "type": "boolean", "default": false, "description": "Hide the scrollbar (for a11y-neutral strips like link bars)." }
+      ],
+      "variants": { "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "The reel items." }],
+      "antiPatterns": [
+        "Paged sliding with dots/arrows/autoplay/snap points — that is Nuxt UI's UCarousel, not CcmReel.",
+        "Adding JS scroll hijacking on top — native overflow scrolling is the contract."
+      ],
+      "since": "PRO-229"
     },
     {
-      "name": "useClipboard",
-      "kind": "composable",
-      "path": "app/composables/useClipboard.ts",
-      "description": "Composable wrapper over copyToClipboard preserving the `const { copy } = useClipboard()` call-site shape.",
-      "since": "PRO-231"
+      "name": "CcmSwitcher",
+      "kind": "component",
+      "path": "app/components/CcmSwitcher.vue",
+      "description": "Every Layout Switcher (ch. 06), implemented with container queries (PRO-229 deviation from the book's flex-basis hack). Switches between horizontal and vertical flex at a container-based breakpoint.",
+      "whenToUse": "Rows that must stack when their CONTAINER (not the viewport) gets narrow: media-object pairs, action bars, side-by-side panels.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "threshold", "type": "'xs' | 's' | 'm' | 'l' | 'xl'", "default": "s", "description": "Named container breakpoint below which children stack (xs=20rem, s=30rem, m=40rem, l=50rem, xl=60rem). Enumerated because @container size conditions cannot read custom properties." },
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." },
+        { "name": "limit", "type": "number (1-6)", "default": 4, "description": "Quantity threshold: with more than this many children the layout stays vertical regardless of width." }
+      ],
+      "variants": { "threshold": ["xs", "s", "m", "l", "xl"], "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "The switching children." }],
+      "antiPatterns": [
+        "Passing a free CSS length as threshold — only the xs–xl names exist.",
+        "Viewport media queries for component-level layout switches — the whole point is container-based."
+      ],
+      "since": "PRO-229"
+    },
+    {
+      "name": "CcmCover",
+      "kind": "component",
+      "path": "app/components/CcmCover.vue",
+      "description": "Every Layout Cover (ch. 07): a min-height column with one principal element vertically centered via auto block margins, optionally book-ended by header/footer children. Default min height 100svh.",
+      "whenToUse": "Viewport-height heroes and cover screens: heading centered, optional bar above and call-to-action below.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token between/around children." },
+        { "name": "minHeight", "type": "string (CSS min-block-size)", "default": "100svh", "description": "Minimum block size of the cover." },
+        { "name": "noPad", "type": "boolean", "default": false, "description": "Drop the padding on the container element." }
+      ],
+      "variants": { "space": "SpaceToken" },
+      "slots": [{ "name": "default", "description": "Children; the centered one is the `h1` or any child carrying the `data-cover-centered` attribute." }],
+      "antiPatterns": [
+        "Centering one box inside another — that is `grid place-items-center`, not a Cover.",
+        "Forgetting the principal element: without an h1 or data-cover-centered child nothing centers."
+      ],
+      "since": "PRO-229"
+    },
+    {
+      "name": "CcmFrame",
+      "kind": "component",
+      "path": "app/components/CcmFrame.vue",
+      "description": "Every Layout Frame (ch. 09): holds any child to a fixed aspect ratio; replaced children (img/video) fill and crop via object-fit, anything else is centered and clipped.",
+      "whenToUse": "Media in cards and previews that must keep a fixed aspect ratio regardless of the source dimensions.",
+      "props": [
+        { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
+        { "name": "ratio", "type": "`${number}:${number}`", "default": "16:9", "description": "Aspect ratio as 'width:height', e.g. '16:9', '4:5', '1:1'. Typed because untyped ratios produced repeated 4:5 cover-crop bugs in Social House." },
+        { "name": "fit", "type": "'cover' | 'contain'", "default": "cover", "description": "How replaced children fill the frame: 'cover' crops, 'contain' letterboxes." }
+      ],
+      "variants": { "fit": ["cover", "contain"] },
+      "slots": [{ "name": "default", "description": "The framed child (usually an img or video)." }],
+      "antiPatterns": [
+        "Overriding object-fit in CSS instead of passing `fit`.",
+        "Malformed ratios — anything not 'W:H' falls back to 16:9 with a console warning."
+      ],
+      "since": "PRO-229"
     },
     {
       "name": "CcmChannelBadge",
       "kind": "component",
       "path": "app/components/CcmChannelBadge.vue",
-      "description": "Brand-colored channel badge (icon + label) driven by the channel registry. Props: channel, label?.",
+      "description": "Brand-colored channel badge (icon + label) driven by the channel registry.",
+      "whenToUse": "Labelling content with its social platform anywhere a compact branded chip fits.",
+      "props": [
+        { "name": "channel", "type": "string | null", "default": null, "description": "Channel name, free-form (e.g. 'instagram', 'Twitter'); alias-aware, unknown values fall back to neutral." },
+        { "name": "label", "type": "string", "default": null, "description": "Optional label override (platform names are proper nouns — rarely needed)." }
+      ],
+      "antiPatterns": [
+        "Hardcoding platform hex colors — brand color comes from the channels registry, the sanctioned token exception."
+      ],
       "since": "PRO-231"
     },
     {
       "name": "CcmChannelIcon",
       "kind": "component",
       "path": "app/components/CcmChannelIcon.vue",
-      "description": "Channel id -> platform SVG mark (alias-aware; neutral globe fallback). Props: channel.",
+      "description": "Channel id -> platform SVG mark (alias-aware; neutral globe fallback).",
+      "whenToUse": "Rendering a platform mark on its own, without the badge chrome.",
+      "props": [
+        { "name": "channel", "type": "string | null", "default": null, "description": "Channel name, free-form (e.g. 'instagram', 'Twitter')." }
+      ],
       "since": "PRO-231"
     },
     {
       "name": "CcmStatusBadge",
       "kind": "component",
       "path": "app/components/CcmStatusBadge.vue",
-      "description": "Status badge rendering the STATUS_COLORS mechanism via themed --ui-* variables. Props: status, label?, locale? (en/pt).",
+      "description": "Status badge rendering the STATUS_COLORS mechanism via themed --ui-* variables.",
+      "whenToUse": "Showing content workflow state (draft/pending/published/…) as a badge. The single status→color mechanism — never map status to color anywhere else.",
+      "props": [
+        { "name": "status", "type": "string | null", "default": null, "description": "Status id, free-form ('published', 'In Buffer', 'draft'); normalized internally." },
+        { "name": "label", "type": "string", "default": null, "description": "Already-translated label override (takes precedence over `locale`)." },
+        { "name": "locale", "type": "string", "default": "en", "description": "Locale for the built-in dictionaries (en/pt)." }
+      ],
+      "antiPatterns": [
+        "Per-status CSS forks or ad-hoc status→color maps in consuming apps — STATUS_COLORS in app/utils/status.ts is the single source."
+      ],
       "since": "PRO-231"
     },
     {
@@ -113,6 +248,93 @@
       "path": "app/components/CcmIconBluesky.vue",
       "description": "Bluesky SVG mark (currentColor).",
       "since": "PRO-231"
+    },
+    {
+      "name": "useClipboard",
+      "kind": "composable",
+      "path": "app/composables/useClipboard.ts",
+      "description": "Composable wrapper over copyToClipboard preserving the `const { copy } = useClipboard()` call-site shape.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "channels",
+      "kind": "util",
+      "path": "app/utils/channels.ts",
+      "description": "Social-channel registry: {label, brandColor, fg, monochrome, icon} per platform (8: instagram, linkedin, x, facebook, youtube, tiktok, google_my_business, bluesky) + resolveChannel/channelBrand/channelIds. Sole home of brand hex (sanctioned token exception).",
+      "antiPatterns": [
+        "Hardcoding platform brand hex anywhere else — this file is the only sanctioned hex location."
+      ],
+      "since": "PRO-231"
+    },
+    {
+      "name": "status",
+      "kind": "util",
+      "path": "app/utils/status.ts",
+      "description": "Status conventions: STATUS_COLORS map (status id -> semantic color: success/info/warning/error/neutral) as the single badge-coloring mechanism, plus EN/PT label dictionaries (STATUS_MESSAGES), statusColor/statusLabel/statusLabelKey/normalizeStatus/statusIds.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "formatDate",
+      "kind": "util",
+      "path": "app/utils/format-date.ts",
+      "description": "Locale-aware, UTC-stable date formatter (Intl-based, no date-fns). formatDate(value, { locale, style }) — defensive: empty -> '', unparseable strings pass through.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "copyToClipboard",
+      "kind": "util",
+      "path": "app/utils/clipboard.ts",
+      "description": "Framework-agnostic clipboard write: navigator.clipboard with hidden-textarea/execCommand fallback. Never throws; resolves boolean.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "composition",
+      "kind": "util",
+      "path": "app/utils/composition.ts",
+      "description": "Shared prop types/guards for the composition components: SPACE_TOKENS (the 9 Utopia steps + 8 one-step pairs), spaceVar(), SWITCHER_THRESHOLDS (xs=20rem…xl=60rem), FrameRatio parsing. SpaceToken values: 3xs 2xs xs s m l xl 2xl 3xl 3xs-2xs 2xs-xs xs-s s-m m-l l-xl xl-2xl 2xl-3xl.",
+      "since": "PRO-229"
+    },
+    {
+      "name": "Icon",
+      "kind": "skip",
+      "description": "Every Layout's Icon layout (icon-to-text sizing/alignment) is deliberately not shipped.",
+      "useInstead": "UIcon (Nuxt UI + Iconify) for general icons; the layer only ships brand marks via CcmChannelIcon.",
+      "since": "PRO-232"
+    },
+    {
+      "name": "Imposter",
+      "kind": "skip",
+      "description": "Every Layout's Imposter (positioned overlay) is deliberately not shipped — overlays are widget territory: focus traps, dismissal, ARIA.",
+      "useInstead": "UModal for dialogs, UPopover for anchored overlays.",
+      "since": "PRO-232"
+    },
+    {
+      "name": "Box",
+      "kind": "skip",
+      "description": "Every Layout's Box (padded/bordered container) is deliberately not shipped — a component wrapper adds nothing over one or two token-backed utilities.",
+      "useInstead": "Utility classes on the design tokens (e.g. p-s, border, rounded-sm) or UCard when it is card-shaped.",
+      "since": "PRO-232"
+    },
+    {
+      "name": "Center",
+      "kind": "skip",
+      "description": "Every Layout's Center (measured horizontal centering with gutters) is deliberately not shipped.",
+      "useInstead": "UContainer for page-width centering; `mx-auto max-w-*` or `grid place-items-center` for one-off intrinsic centering.",
+      "since": "PRO-232"
+    },
+    {
+      "name": "Container",
+      "kind": "skip",
+      "description": "No bespoke width-container component. Component-responsive behavior belongs to container queries, not wrapper components.",
+      "useInstead": "UContainer for the page shell; CSS container queries (the CcmSwitcher pattern) when a component must respond to its own width.",
+      "since": "PRO-232"
+    },
+    {
+      "name": "Sidebar",
+      "kind": "skip",
+      "description": "Every Layout's Sidebar (sidebar-with-content pair) is deferred, not rejected — no consuming product needs it yet.",
+      "useInstead": "CcmSwitcher or a grid for now; when a sidebar pattern recurs (2+ real uses across consuming apps), extract it into the layer as CcmSidebar per the extraction rule.",
+      "since": "PRO-232"
     }
   ]
 }

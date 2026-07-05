@@ -48,7 +48,7 @@ const textVar = (step: string) => `var(--text-${step})`
 </script>
 
 <template>
-  <main data-testid="gallery" class="mx-auto flex max-w-4xl flex-col gap-xl px-4 py-l">
+  <CcmStack as="main" data-testid="gallery" space="xl" class="mx-auto max-w-4xl px-4 py-l">
     <header class="flex flex-col gap-2">
       <div class="flex items-center justify-between gap-4">
         <h1 class="text-step-3 font-semibold">
@@ -348,5 +348,5 @@ const textVar = (step: string) => `var(--text-${step})`
         </figure>
       </div>
     </section>
-  </main>
+  </CcmStack>
 </template>
