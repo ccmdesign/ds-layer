@@ -19,9 +19,12 @@ BRIEF="$ROOT/docs/solutions/PRO-233-gate3/brief.txt"
 
 mkdir -p "$OUT"
 
-# Clean slate: revert the spike app to HEAD and drop the stand-in page so the
-# agent starts from the bare scaffold every attempt.
+# Clean slate: revert the spike app to HEAD, drop files left by a previous
+# attempt (untracked, non-ignored), then remove the stand-in page so the agent
+# starts from the bare scaffold every attempt.
+git -C "$ROOT" reset -q -- spikes/spike-app
 git -C "$ROOT" checkout -- spikes/spike-app
+git -C "$ROOT" clean -fd -- spikes/spike-app
 rm -f "$APP/app/pages/review.vue"
 
 echo "== Gate 3 attempt $N: running agent (this can take minutes) =="
@@ -31,6 +34,7 @@ echo "== Gate 3 attempt $N: running agent (this can take minutes) =="
 echo "== Archiving the agent's diff =="
 git -C "$ROOT" add -N spikes/spike-app
 git -C "$ROOT" diff -- spikes/spike-app > "$OUT/diff.patch"
+git -C "$ROOT" reset -q -- spikes/spike-app
 
 echo "== DS-6 lint gates (zero corrections applied) =="
 ESLINT_STATUS=0
