@@ -11,7 +11,7 @@ const demoImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
 </script>
 
 <template>
-  <main class="mx-auto flex max-w-4xl flex-col gap-l px-4 py-l">
+  <CcmStack as="main" space="l" class="mx-auto max-w-4xl px-4 py-l">
     <h1 class="text-step-3 font-semibold">
       Frame
     </h1>
@@ -51,5 +51,5 @@ const demoImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
         <p class="text-step-1">centered and clipped</p>
       </CcmFrame>
     </section>
-  </main>
+  </CcmStack>
 </template>

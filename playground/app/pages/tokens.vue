@@ -15,7 +15,7 @@ const textVar = (step: string) => `var(--text-step-${step.startsWith('-') ? `-${
 </script>
 
 <template>
-  <main class="mx-auto flex max-w-4xl flex-col gap-l px-4 py-l">
+  <CcmStack as="main" space="l" class="mx-auto max-w-4xl px-4 py-l">
     <header class="flex flex-col gap-2">
       <h1 class="text-step-3 font-semibold">
         Design tokens
@@ -109,7 +109,7 @@ const textVar = (step: string) => `var(--text-step-${step.startsWith('-') ? `-${
           v-for="r in radii"
           :key="r"
           :style="{ borderRadius: `var(--radius-${r})` }"
-          class="border-accented bg-elevated flex size-20 items-center justify-center border"
+          class="border-accented bg-elevated grid size-20 place-items-center border"
         >
           <code class="text-sm">{{ r }}</code>
         </div>
@@ -131,5 +131,5 @@ const textVar = (step: string) => `var(--text-step-${step.startsWith('-') ? `-${
         </div>
       </div>
     </section>
-  </main>
+  </CcmStack>
 </template>

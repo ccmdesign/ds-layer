@@ -21,12 +21,35 @@ pnpm build       # builds the playground app
 
 ```
 ├── nuxt.config.ts            # the layer (Nuxt UI module + layer CSS)
-├── app/assets/css/main.css   # tailwindcss + @nuxt/ui imports; tokens land in PRO-228
+├── app/assets/css/main.css   # tailwindcss + @nuxt/ui imports + tokens + composition CSS
 ├── playground/               # consumer app: extends ['..']
-├── eslint.config.mjs         # baseline (custom DS rules land in DS-6)
-├── stylelint.config.mjs      # baseline (custom DS rules land in DS-6)
-└── .github/workflows/ci.yml  # PR gate: install → lint → build
+├── manifest.json             # machine-readable component manifest (ccm-ds/manifest@1)
+├── llms.txt                  # GENERATED from manifest.json (pnpm build:llms)
+├── AGENTS.md                 # ambient doctrine rules for agents
+├── skills/ccm-ds/            # Claude Code skill (ships with the package)
+├── lint/eslint-plugin-ccm/   # ccm/class-budget + ccm/no-bespoke-widgets
+├── eslint.config.mjs         # Nuxt baseline + DS-6 steering rules
+├── stylelint.config.mjs      # standard baseline + no raw hex/px outside tokens
+└── .github/workflows/ci.yml  # PR gate: install → tokens/manifest/llms checks → lint → fixture gate → test → build
 ```
+
+## Agent-steering stack (DS-6)
+
+Five parts make agents produce on-system UI:
+
+1. **`manifest.json`** — per-component props/slots/when-to-use/anti-patterns,
+   plus `kind: "skip"` entries for the Every Layout primitives the layer
+   deliberately omits. Validated by `pnpm manifest:check`.
+2. **`llms.txt`** — generated from the manifest (`pnpm build:llms`,
+   byte-deterministic, CI-diffed like the tokens).
+3. **`AGENTS.md`** — the five doctrine rules agents pick up ambiently.
+4. **`skills/ccm-ds/`** — the active Claude Code procedure; consuming apps
+   copy/symlink it into `.claude/skills/` (instructions in the skill).
+5. **Lint enforcement** — ESLint `ccm/class-budget` (utility budget outside
+   `components/`) and `ccm/no-bespoke-widgets` (no raw
+   button/input/select/table/dialog), Stylelint `color-no-hex` +
+   `unit-disallowed-list: px`. `test/lint/lint-gate.spec.ts` proves the
+   fixtures fail through the real configs (`pnpm test:lint`).
 
 ## Links
 

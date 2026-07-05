@@ -26,11 +26,22 @@ jobs:
           pnpm build:tokens
           git diff --exit-code -- tokens app/assets/css/tokens.css
 
+      - name: Manifest schema check
+        run: pnpm manifest:check
+
+      - name: llms.txt generated from manifest and committed
+        run: |
+          pnpm build:llms
+          git diff --exit-code -- llms.txt
+
       - name: Lint (ESLint)
         run: pnpm lint
 
       - name: Lint (Stylelint)
         run: pnpm lint:style
+
+      - name: Lint fixture gate (violations must fail, clean must pass)
+        run: pnpm test:lint
 
       - name: Component tests
         run: pnpm test

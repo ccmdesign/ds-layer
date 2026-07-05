@@ -1,0 +1,7 @@
+/* FIXTURE (must PASS): plain CSS on the design tokens. */
+.fixture-clean {
+  margin-block-start: var(--spacing-m);
+  color: var(--ui-text);
+  font-size: var(--text-step-1);
+  border-radius: 0.5rem;
+}
