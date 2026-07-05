@@ -1,0 +1,38 @@
+{
+  "name": "@ccm/ds",
+  "version": "0.1.0",
+  "description": "CCM design-system Nuxt layer: Nuxt UI v4 + Utopia fluid tokens + Every Layout composition components",
+  "type": "module",
+  "license": "UNLICENSED",
+  "repository": "github:ccmdesign/ds-layer",
+  "main": "./nuxt.config.ts",
+  "files": [
+    "app",
+    "nuxt.config.ts"
+  ],
+  "scripts": {
+    "dev": "nuxt dev playground",
+    "build": "nuxt build playground",
+    "generate": "nuxt generate playground",
+    "preview": "nuxt preview playground",
+    "lint": "eslint .",
+    "lint:style": "stylelint \"**/*.{css,vue}\" --allow-empty-input",
+    "dev:prepare": "nuxt prepare playground"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^4.9.0",
+    "tailwindcss": "^4.3.2"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^1.16.0",
+    "eslint": "^9.0.0",
+    "nuxt": "^4.4.8",
+    "postcss-html": "^1.8.0",
+    "stylelint": "^17.14.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^5.9.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "packageManager": "pnpm@10.33.2"
+}
