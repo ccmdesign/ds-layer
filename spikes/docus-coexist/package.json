@@ -1,0 +1,19 @@
+{
+  "name": "docus-coexist",
+  "private": true,
+  "type": "module",
+  "description": "PRO-233 Gate 1 fixture: minimal app extending BOTH docus and the @ccm/ds layer (Social House's real configuration).",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "docus": "^5.12.3"
+  },
+  "devDependencies": {
+    "nuxt": "^4.4.8",
+    "vue": "^3.5.0"
+  },
+  "packageManager": "pnpm@10.33.2"
+}

@@ -22,6 +22,8 @@
     "manifest:check": "node scripts/check-manifest.mjs",
     "dev": "nuxt dev playground",
     "build": "nuxt build playground",
+    "dev:spike": "nuxt dev spikes/spike-app",
+    "build:spike": "nuxt prepare playground && nuxt build spikes/spike-app",
     "generate": "nuxt generate playground",
     "preview": "nuxt preview playground",
     "lint": "eslint .",
