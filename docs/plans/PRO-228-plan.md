@@ -63,6 +63,11 @@ From `social-house-frontend/app/app.config.ts` + `app/assets/css/brand.css` + co
 - `pnpm lint`, `pnpm lint:style`, `pnpm build` green.
 - Browser: playground `/tokens` page at 360px and 1240px — assert `--text-step-0`/`--spacing-m` resolve to different computed px at each viewport (fluid), swatches render.
 
+## Deviations (post-implementation)
+
+- Decision 3: the format emits `@theme static` (not plain `@theme`) — Tailwind v4 tree-shakes theme variables it never sees literally in scanned sources, and both the docs page and downstream consumers reference tokens dynamically via `var(--…)`.
+- Decision 7: no Fontsource head-links needed — `@nuxt/fonts` (bundled with Nuxt UI) resolves Satoshi straight from the `--font-sans` token and self-hosts the files.
+
 ## Risks
 
 - SD color transforms mangling `oklch()` → avoided by using no value transforms (custom format passes raw values).

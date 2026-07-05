@@ -8,7 +8,8 @@
   "main": "./nuxt.config.ts",
   "files": [
     "app",
-    "nuxt.config.ts"
+    "nuxt.config.ts",
+    "tokens"
   ],
   "scripts": {
     "build:tokens": "node scripts/build-tokens.mjs",
