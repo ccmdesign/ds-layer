@@ -1,0 +1,118 @@
+{
+  "$comment": "DS-6 stub (created by PRO-231): the component/export manifest for agent consumers. DS-6 owns the final schema — adopt or migrate these entries. `kind` is one of component | composable | util | data.",
+  "schema": "ds-6-draft",
+  "entries": [
+    {
+      "name": "channels",
+      "kind": "util",
+      "path": "app/utils/channels.ts",
+      "description": "Social-channel registry: {label, brandColor, fg, monochrome, icon} per platform (8: instagram, linkedin, x, facebook, youtube, tiktok, google_my_business, bluesky) + resolveChannel/channelBrand/channelIds. Sole home of brand hex (sanctioned token exception).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "status",
+      "kind": "util",
+      "path": "app/utils/status.ts",
+      "description": "Status conventions: STATUS_COLORS map (status id -> semantic color: success/info/warning/error/neutral) as the single badge-coloring mechanism, plus EN/PT label dictionaries (STATUS_MESSAGES), statusColor/statusLabel/statusLabelKey/normalizeStatus/statusIds.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "formatDate",
+      "kind": "util",
+      "path": "app/utils/format-date.ts",
+      "description": "Locale-aware, UTC-stable date formatter (Intl-based, no date-fns). formatDate(value, { locale, style }) — defensive: empty -> '', unparseable strings pass through.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "copyToClipboard",
+      "kind": "util",
+      "path": "app/utils/clipboard.ts",
+      "description": "Framework-agnostic clipboard write: navigator.clipboard with hidden-textarea/execCommand fallback. Never throws; resolves boolean.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "useClipboard",
+      "kind": "composable",
+      "path": "app/composables/useClipboard.ts",
+      "description": "Composable wrapper over copyToClipboard preserving the `const { copy } = useClipboard()` call-site shape.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmChannelBadge",
+      "kind": "component",
+      "path": "app/components/CcmChannelBadge.vue",
+      "description": "Brand-colored channel badge (icon + label) driven by the channel registry. Props: channel, label?.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmChannelIcon",
+      "kind": "component",
+      "path": "app/components/CcmChannelIcon.vue",
+      "description": "Channel id -> platform SVG mark (alias-aware; neutral globe fallback). Props: channel.",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmStatusBadge",
+      "kind": "component",
+      "path": "app/components/CcmStatusBadge.vue",
+      "description": "Status badge rendering the STATUS_COLORS mechanism via themed --ui-* variables. Props: status, label?, locale? (en/pt).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconInstagram",
+      "kind": "component",
+      "path": "app/components/CcmIconInstagram.vue",
+      "description": "Instagram SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconLinkedin",
+      "kind": "component",
+      "path": "app/components/CcmIconLinkedin.vue",
+      "description": "LinkedIn SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconX",
+      "kind": "component",
+      "path": "app/components/CcmIconX.vue",
+      "description": "X (Twitter) SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconFacebook",
+      "kind": "component",
+      "path": "app/components/CcmIconFacebook.vue",
+      "description": "Facebook SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconYoutube",
+      "kind": "component",
+      "path": "app/components/CcmIconYoutube.vue",
+      "description": "YouTube SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconTiktok",
+      "kind": "component",
+      "path": "app/components/CcmIconTiktok.vue",
+      "description": "TikTok SVG mark (currentColor).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconGoogleMyBusiness",
+      "kind": "component",
+      "path": "app/components/CcmIconGoogleMyBusiness.vue",
+      "description": "Google G mark (fixed multi-color fills; internal-onboarding use only per Google brand guidelines).",
+      "since": "PRO-231"
+    },
+    {
+      "name": "CcmIconBluesky",
+      "kind": "component",
+      "path": "app/components/CcmIconBluesky.vue",
+      "description": "Bluesky SVG mark (currentColor).",
+      "since": "PRO-231"
+    }
+  ]
+}

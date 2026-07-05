@@ -12,5 +12,8 @@
     <UButton to="/tokens" variant="link" data-testid="tokens-link">
       Token reference →
     </UButton>
+    <UButton to="/domain" variant="link" data-testid="domain-link">
+      Domain foundations →
+    </UButton>
   </main>
 </template>
