@@ -26,6 +26,13 @@ push('## Doctrine')
 push('')
 for (const rule of manifest.doctrine) push(`- ${rule}`)
 
+if (manifest.types && Object.keys(manifest.types).length > 0) {
+  push('', '## Types', '')
+  for (const [name, values] of Object.entries(manifest.types)) {
+    push(`- \`${name}\`: ${values.join(' | ')}`)
+  }
+}
+
 const byKind = kind => manifest.entries.filter(e => e.kind === kind)
 
 function renderEntry(entry) {

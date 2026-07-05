@@ -10,6 +10,10 @@
     "ccm-layer CSS is plain CSS written on the design tokens (var(--spacing-*), var(--text-step-*), var(--color-*)) — no raw hex, no raw px (Stylelint enforces this).",
     "@apply is reserved for prose/markdown styling — never use it to build components."
   ],
+  "types": {
+    "SpaceToken": ["3xs", "2xs", "xs", "s", "m", "l", "xl", "2xl", "3xl", "3xs-2xs", "2xs-xs", "xs-s", "s-m", "m-l", "l-xl", "xl-2xl", "2xl-3xl"],
+    "SwitcherThreshold": ["xs", "s", "m", "l", "xl"]
+  },
   "entries": [
     {
       "name": "CcmStack",
@@ -104,7 +108,7 @@
         { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." },
         { "name": "limit", "type": "number (1-6)", "default": 4, "description": "Quantity threshold: with more than this many children the layout stays vertical regardless of width." }
       ],
-      "variants": { "threshold": ["xs", "s", "m", "l", "xl"], "space": "SpaceToken" },
+      "variants": { "threshold": "SwitcherThreshold", "space": "SpaceToken" },
       "slots": [{ "name": "default", "description": "The switching children." }],
       "antiPatterns": [
         "Passing a free CSS length as threshold — only the xs–xl names exist.",

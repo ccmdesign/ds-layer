@@ -12,6 +12,11 @@ Machine-readable source of truth: manifest.json (schema ccm-ds/manifest@1). This
 - ccm-layer CSS is plain CSS written on the design tokens (var(--spacing-*), var(--text-step-*), var(--color-*)) — no raw hex, no raw px (Stylelint enforces this).
 - @apply is reserved for prose/markdown styling — never use it to build components.
 
+## Types
+
+- `SpaceToken`: 3xs | 2xs | xs | s | m | l | xl | 2xl | 3xl | 3xs-2xs | 2xs-xs | xs-s | s-m | m-l | l-xl | xl-2xl | 2xl-3xl
+- `SwitcherThreshold`: xs | s | m | l | xl
+
 ## Components
 
 ### CcmStack

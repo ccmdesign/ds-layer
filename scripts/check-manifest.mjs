@@ -37,6 +37,10 @@ if (!Array.isArray(manifest.doctrine) || manifest.doctrine.length === 0 || !mani
 if (!Array.isArray(manifest.entries) || manifest.entries.length === 0) {
   errors.push('entries must be a non-empty array')
 }
+const types = manifest.types ?? {}
+if (typeof types !== 'object' || Array.isArray(types) || Object.values(types).some(v => !Array.isArray(v) || !v.every(x => typeof x === 'string'))) {
+  errors.push('types must be an object of string arrays')
+}
 
 const seen = new Set()
 for (const entry of manifest.entries ?? []) {
@@ -71,6 +75,20 @@ for (const entry of manifest.entries ?? []) {
   }
   if (entry?.slots !== undefined && (!Array.isArray(entry.slots) || !entry.slots.every(s => typeof s?.name === 'string' && typeof s?.description === 'string'))) {
     errors.push(`${where}: slots must be [{name, description}]`)
+  }
+  if (entry?.variants !== undefined) {
+    if (typeof entry.variants !== 'object' || Array.isArray(entry.variants)) {
+      errors.push(`${where}: variants must be an object`)
+    }
+    else {
+      for (const [prop, values] of Object.entries(entry.variants)) {
+        const isLiteralList = Array.isArray(values) && values.every(v => typeof v === 'string')
+        const isTypeRef = typeof values === 'string' && Array.isArray(types[values])
+        if (!isLiteralList && !isTypeRef) {
+          errors.push(`${where}: variant '${prop}' must be a string array or the name of a top-level type`)
+        }
+      }
+    }
   }
   if (entry?.antiPatterns !== undefined && (!Array.isArray(entry.antiPatterns) || !entry.antiPatterns.every(a => typeof a === 'string' && a))) {
     errors.push(`${where}: antiPatterns must be an array of strings`)
