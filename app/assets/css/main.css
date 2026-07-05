@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "./tokens.css";
 
 /*
  * @ccm/ds layer stylesheet.
- * Utopia fluid tokens land in PRO-228; Every Layout composition styles in PRO-229.
+ * tokens.css is GENERATED from the DTCG source in tokens/ (pnpm build:tokens).
+ * Every Layout composition styles land in PRO-229.
  */

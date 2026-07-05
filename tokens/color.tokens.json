@@ -1,0 +1,31 @@
+{
+  "color": {
+    "$description": "OKLCH palette. Indigo (primary) and slate (neutral) seeded from Social House's rendered look — values match Tailwind v4's OKLCH palette exactly so the visual output is unchanged while ownership moves to this DTCG source. Semantic aliasing (primary/neutral) happens via Nuxt UI in app/app.config.ts. Brand-exception channel colors arrive in DS-5.",
+    "indigo": {
+      "50": { "$value": "oklch(96.2% 0.018 272.314)", "$type": "color" },
+      "100": { "$value": "oklch(93% 0.034 272.788)", "$type": "color" },
+      "200": { "$value": "oklch(87% 0.065 274.039)", "$type": "color" },
+      "300": { "$value": "oklch(78.5% 0.115 274.713)", "$type": "color" },
+      "400": { "$value": "oklch(67.3% 0.182 276.935)", "$type": "color" },
+      "500": { "$value": "oklch(58.5% 0.233 277.117)", "$type": "color" },
+      "600": { "$value": "oklch(51.1% 0.262 276.966)", "$type": "color" },
+      "700": { "$value": "oklch(45.7% 0.24 277.023)", "$type": "color" },
+      "800": { "$value": "oklch(39.8% 0.195 277.366)", "$type": "color" },
+      "900": { "$value": "oklch(35.9% 0.144 278.697)", "$type": "color" },
+      "950": { "$value": "oklch(25.7% 0.09 281.288)", "$type": "color" }
+    },
+    "slate": {
+      "50": { "$value": "oklch(98.4% 0.003 247.858)", "$type": "color" },
+      "100": { "$value": "oklch(96.8% 0.007 247.896)", "$type": "color" },
+      "200": { "$value": "oklch(92.9% 0.013 255.508)", "$type": "color" },
+      "300": { "$value": "oklch(86.9% 0.022 252.894)", "$type": "color" },
+      "400": { "$value": "oklch(70.4% 0.04 256.788)", "$type": "color" },
+      "500": { "$value": "oklch(55.4% 0.046 257.417)", "$type": "color" },
+      "600": { "$value": "oklch(44.6% 0.043 257.281)", "$type": "color" },
+      "700": { "$value": "oklch(37.2% 0.044 257.287)", "$type": "color" },
+      "800": { "$value": "oklch(27.9% 0.041 260.031)", "$type": "color" },
+      "900": { "$value": "oklch(20.8% 0.042 265.755)", "$type": "color" },
+      "950": { "$value": "oklch(12.9% 0.042 264.695)", "$type": "color" }
+    }
+  }
+}
