@@ -58,3 +58,8 @@ jobs:
 
       - name: Build docus-coexist (layer + docus, Social House configuration)
         run: pnpm --dir spikes/docus-coexist build
+        env:
+          # The docus + layer Nitro build exceeds the runner's default ~2 GB
+          # node heap (OOM, exit 134); it needs no more than a plain-sized
+          # heap bump. Verified green locally with default heap on 32 GB.
+          NODE_OPTIONS: --max-old-space-size=4096
