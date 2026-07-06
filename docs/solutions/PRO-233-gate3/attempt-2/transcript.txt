@@ -1,0 +1,11 @@
+Built `/review` — composed entirely from Nuxt UI (`U*`) widgets and layer (`Ccm*`) primitives, no bespoke markup. Verified: eslint + stylelint clean (class-budget + no-bespoke-widgets pass), dev server returns 200, all six cards render with channel/status badges and long-form dates.
+
+What's there:
+- `UForm` + `validate` → inline errors on empty caption/date; caption `UTextarea` hard-capped at 280 with a live `hint` counter.
+- Valid submit opens `UModal` summarizing title/channel/date/caption → Confirm resets the form + fires a success `useToast`; Cancel closes.
+- Planned posts in a container-intrinsic `CcmGrid` of `UCard`s (`CcmChannelBadge`, `CcmStatusBadge`, `formatDate`).
+- Light/dark comes free from the token-backed classes + the existing `UColorModeButton`.
+
+skipped: >280 validation branch (native `maxlength` enforces it) and any data layer (static array). Add when captions can arrive pre-filled over 280, or posts come from an API.
+
+DONE

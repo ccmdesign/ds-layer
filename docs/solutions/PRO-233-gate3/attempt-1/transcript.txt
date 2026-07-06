@@ -1,0 +1,12 @@
+Built clean — `review` route compiled. Lint + stylelint green, spike build ✓.
+
+`app/pages/review.vue` — composed entirely from Nuxt UI widgets (`UForm/UInput/UTextarea/USelect/UButton/UModal/UCard`) + layer primitives (`CcmStack/CcmCluster/CcmGrid/CcmSwitcher`, `CcmChannelBadge/CcmStatusBadge`, `formatDate`). All four requirements covered:
+
+- **Form + inline validation** — `UForm`'s `validate` returns per-field errors; caption is required with a live `n/280` counter and >280 error; channel + date required.
+- **Confirm modal** — valid submit opens `UModal` summarizing title/channel/date/caption; Confirm resets state and fires a `useToast` success; Cancel closes.
+- **Planned posts grid** — the six static posts in a container-intrinsic `CcmGrid` of `UCard`s (channel badge, status badge, title, human date).
+- **Light/dark** — semantic tokens only (`text-step-*`, `text-muted`, layer badge components), no hardcoded colors.
+
+skipped: separate `maxlength` attr on the textarea — intentionally left off so the >280 error path is reachable, add when hard-blocking input is preferred over showing the error.
+
+DONE
