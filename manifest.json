@@ -5,6 +5,7 @@
   "description": "CCM design-system Nuxt layer: Nuxt UI v4 + Utopia fluid tokens + Every Layout composition components + domain foundations.",
   "doctrine": [
     "Pages compose components — a page file wires existing Nuxt UI and Ccm components together; it does not build widgets or layouts out of raw markup and utility soup.",
+    "Wrappers compose U* components or native elements — never re-implement their behavior. A wrapper earns its existence by encoding STRUCTURE or BEHAVIOR, never style alone (style-only differences belong in app.config theme slots).",
     "Class strings live only inside Tailwind Variants definitions (component files). Outside components/, class attributes are budgeted by lint (ccm/class-budget); pass props, not classes.",
     "Nuxt UI is restyled through app.config.ts (`ui` key) only — never inline :ui props, never scattered CSS overrides.",
     "ccm-layer CSS is plain CSS written on the design tokens (var(--spacing-*), var(--text-step-*), var(--color-*)) — no raw hex, no raw px (Stylelint enforces this).",
@@ -252,6 +253,73 @@
       "path": "app/components/CcmIconBluesky.vue",
       "description": "Bluesky SVG mark (currentColor).",
       "since": "PRO-231"
+    },
+    {
+      "name": "CcmCard",
+      "kind": "component",
+      "path": "app/components/CcmCard.vue",
+      "description": "Adoption wrapper composing UCard: encodes the recurring Social House card STRUCTURE — header row (title + optional trailing affordance), meta line, badges row, body, and an actions row whose last (primary) action is pushed to the inline-end. Chrome and theming stay UCard's (app.config).",
+      "whenToUse": "Any card following the title/meta/badges/body/actions anatomy (~80% of Social House card uses). If this doesn't fit, drop to UCard directly — don't extend CcmCard.",
+      "props": [
+        { "name": "title", "type": "string", "default": null, "description": "Card title (or use the `title` slot)." },
+        { "name": "meta", "type": "string", "default": null, "description": "Meta/subtitle line under the title (or use the `meta` slot)." },
+        { "name": "variant", "type": "'solid' | 'outline' | 'soft' | 'subtle'", "default": null, "description": "UCard variant, forwarded as-is (UCard's own default applies when omitted)." }
+      ],
+      "variants": { "variant": ["solid", "outline", "soft", "subtle"] },
+      "slots": [
+        { "name": "title", "description": "Title override (takes precedence over the `title` prop)." },
+        { "name": "trailing", "description": "Trailing affordance on the title row (icon, arrow, menu button)." },
+        { "name": "meta", "description": "Meta line override (takes precedence over the `meta` prop)." },
+        { "name": "badges", "description": "Chips/badges row under the meta line (CcmStatusBadge, CcmChannelBadge, UBadge…)." },
+        { "name": "default", "description": "Card body." },
+        { "name": "actions", "description": "Footer button cluster; the LAST child is pushed to the inline-end — put the primary action last." }
+      ],
+      "antiPatterns": [
+        "Extending CcmCard with new props/slots when the anatomy doesn't fit — drop to UCard directly instead.",
+        "Passing `:ui` overrides — there is deliberately no `:ui` passthrough; restyle via app.config.ts.",
+        "Rebuilding the header/actions structure inside the body slot — that's what the named slots are for."
+      ],
+      "since": "PRO-235"
+    },
+    {
+      "name": "CcmKeyValue",
+      "kind": "component",
+      "path": "app/components/CcmKeyValue.vue",
+      "description": "Definition list on native dl/dt/dd. Pairs arrive as an `items` array and/or slotted custom dt/dd children. Grid variant: label column sized minmax(3.5rem, max-content), values fill the rest; stacked variant: label above value.",
+      "whenToUse": "Label/value metadata blocks — post details, settings summaries, spec sheets. Reach for this instead of hand-rolled two-column grids of spans.",
+      "props": [
+        { "name": "items", "type": "{ term: string, value?: string }[]", "default": "[]", "description": "Term/value pairs to render (before any slotted pairs)." },
+        { "name": "variant", "type": "'grid' | 'stacked'", "default": "grid", "description": "Layout: label/value grid or stacked label-above-value." }
+      ],
+      "variants": { "variant": ["grid", "stacked"] },
+      "slots": [
+        { "name": "default", "description": "Custom `<dt>/<dd>` pairs (rendered after `items`; a dt may carry several dd — the grid keeps columns straight)." }
+      ],
+      "antiPatterns": [
+        "Slotting non-dt/dd markup — the default slot is for definition-list children only.",
+        "Using it for tabular data with column headers — that is UTable."
+      ],
+      "since": "PRO-235"
+    },
+    {
+      "name": "CcmDisclosure",
+      "kind": "component",
+      "path": "app/components/CcmDisclosure.vue",
+      "description": "Native details/summary with the DS skin — works without JS, collapsed by default. The closed state hides content regardless of author CSS on the children (`:not([open])` guard in wrappers.css). Optional count/badge affordance after the label.",
+      "whenToUse": "Zero-JS collapsible sections: filters, advanced options, FAQ items. For default-open, pass the native `open` attribute (it falls through to the details root).",
+      "props": [
+        { "name": "summary", "type": "string", "default": null, "description": "Summary label (or use the `summary` slot)." },
+        { "name": "count", "type": "number | string", "default": null, "description": "Optional count/badge affordance rendered after the label." }
+      ],
+      "slots": [
+        { "name": "summary", "description": "Summary label override (takes precedence over the `summary` prop)." },
+        { "name": "default", "description": "The collapsible content." }
+      ],
+      "antiPatterns": [
+        "Controlled/animated/exclusive accordions — that is Nuxt UI's UAccordion, not CcmDisclosure.",
+        "Adding JS toggle handlers on top — native details behavior is the contract."
+      ],
+      "since": "PRO-235"
     },
     {
       "name": "useClipboard",

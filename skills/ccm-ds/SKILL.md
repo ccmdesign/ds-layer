@@ -20,12 +20,40 @@ surface. Your job is to compose, not invent.
 2. **Compose from Nuxt UI + Ccm components.**
    - Widgets (buttons, inputs, selects, modals, tables, badges, popovers…):
      Nuxt UI `U*` components. Never raw `<button>/<input>/<select>/<table>/
-     <dialog>` — lint (`ccm/no-bespoke-widgets`) will fail you.
+     <dialog>` — lint (`ccm/no-bespoke-widgets`) will fail you. Wrappers
+     compose `U*` components or native elements — never re-implement their
+     behavior; a wrapper encodes STRUCTURE or BEHAVIOR, never style alone.
    - Layout: the Ccm composition primitives — `CcmStack` (vertical rhythm),
      `CcmCluster` (wrapping rows), `CcmGrid` (container-intrinsic card grids),
      `CcmReel` (native scroll strips; paged widgets are `UCarousel`),
      `CcmSwitcher` (container-based orientation switch), `CcmCover`
      (viewport-height hero), `CcmFrame` (fixed aspect ratio media).
+   - Adoption wrappers (PRO-235) — `CcmCard` (the recurring
+     title/meta/badges/body/actions card anatomy composed on `UCard`; if the
+     anatomy doesn't fit, drop to `UCard` directly — don't extend CcmCard.
+     Put the primary action LAST in the `actions` slot; it is pushed to the
+     inline-end), `CcmKeyValue` (native `dl/dt/dd` label/value pairs —
+     `items` array and/or slotted pairs; `variant="grid" | "stacked"`),
+     `CcmDisclosure` (native `details/summary`, zero-JS, collapsed by
+     default — pass the native `open` attribute for default-open; controlled
+     or animated accordions are `UAccordion`).
+
+     ```vue
+     <CcmCard title="Spring launch" meta="Tomorrow, 9:00">
+       <template #badges><CcmStatusBadge status="in_buffer" /></template>
+       <p>Body copy…</p>
+       <template #actions>
+         <UButton variant="outline" color="neutral">Edit</UButton>
+         <UButton>Publish now</UButton> <!-- last = primary, pushed right -->
+       </template>
+     </CcmCard>
+
+     <CcmKeyValue :items="[{ term: 'Channel', value: 'Instagram' }]" />
+
+     <CcmDisclosure summary="Advanced options" :count="3">
+       <p>Zero-JS collapsible content.</p>
+     </CcmDisclosure>
+     ```
    - Domain bits (channel badges/icons, status badges, date formatting):
      already in the layer — check the manifest before writing new ones.
 3. **Props, not classes.** Spacing, thresholds, ratios, and variants are typed

@@ -15,5 +15,8 @@
     <UButton to="/domain" variant="link" data-testid="domain-link">
       Domain foundations →
     </UButton>
+    <UButton to="/wrappers" variant="link" data-testid="wrappers-link">
+      Adoption wrappers →
+    </UButton>
   </main>
 </template>

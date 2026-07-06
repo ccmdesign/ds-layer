@@ -1,0 +1,192 @@
+/*
+ * Adoption wrappers (PRO-235 / DS-8a): CcmCard, CcmKeyValue, CcmDisclosure.
+ *
+ * Plain CSS only — no Tailwind syntax. Imported by main.css with
+ * `layer(components)` so everything here lands in Tailwind v4's components
+ * cascade layer (same mechanism as composition.css). Values come from the
+ * Utopia tokens (--spacing-*, --text-step-*) and the themed --ui-* semantic
+ * aliases, never raw magic numbers. Cascade-layer CSS (not scoped styles)
+ * on purpose: all three wrappers style SLOTTED content — the card's action
+ * cluster, the definition list's custom dt/dd pairs, the disclosure's
+ * closed-state hiding — which Vue scoped CSS cannot reach cleanly.
+ */
+
+/* ------------------------------------------------------------------- Card
+ * Structure only — the card chrome (background, border, padding) is UCard's,
+ * themed via app.config.ts. These classes lay out the recurring Social House
+ * header/meta/badges/body/actions anatomy inside UCard's slots.
+ */
+.ccm-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.ccm-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-s);
+}
+
+.ccm-card-title {
+  margin: 0;
+  font-size: var(--text-step-1);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ccm-card-trailing {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--spacing-3xs);
+  color: var(--ui-text-muted);
+}
+
+.ccm-card-meta {
+  margin: 0;
+  color: var(--ui-text-muted);
+
+  /* Utopia negative steps carry a double dash (same exemption as tokens.css) */
+  /* stylelint-disable-next-line custom-property-pattern */
+  font-size: var(--text-step--1);
+}
+
+.ccm-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3xs);
+}
+
+/* Actions row: a wrapping cluster whose LAST action (the primary) is pushed
+ * to the inline-end — the recurring Social House button-row structure. */
+.ccm-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2xs);
+}
+
+.ccm-card-actions > :last-child {
+  margin-inline-start: auto;
+}
+
+/* -------------------------------------------------------------- Key/value
+ * Native definition list. Grid variant: label column sized to its content
+ * (never below 3.5rem), values fill the remainder; stacked variant: label
+ * above value. dt/dd selectors are descendant (not child-scoped classes) so
+ * slotted custom pairs pick up the same treatment as `items`-rendered ones.
+ */
+.ccm-key-value {
+  margin: 0;
+}
+
+.ccm-key-value dt {
+  color: var(--ui-text-muted);
+  font-weight: 500;
+
+  /* stylelint-disable-next-line custom-property-pattern */
+  font-size: var(--text-step--1);
+}
+
+.ccm-key-value dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--text-step-0);
+}
+
+.ccm-key-value[data-variant='grid'] {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, max-content) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--spacing-2xs) var(--spacing-s);
+}
+
+/* Explicit column assignment keeps pairs aligned even when a slotted term
+ * carries multiple values (dt followed by several dd). */
+.ccm-key-value[data-variant='grid'] dt {
+  grid-column: 1;
+}
+
+.ccm-key-value[data-variant='grid'] dd {
+  grid-column: 2;
+}
+
+.ccm-key-value[data-variant='stacked'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.ccm-key-value[data-variant='stacked'] dt:not(:first-child) {
+  margin-block-start: var(--spacing-xs);
+}
+
+.ccm-key-value[data-variant='stacked'] dd {
+  margin-block-start: var(--spacing-3xs);
+}
+
+/* ------------------------------------------------------------- Disclosure
+ * Native details/summary with the DS skin — no JS. The :not([open]) guard is
+ * load-bearing: author CSS (e.g. `display: grid`) on inner content defeats
+ * the UA stylesheet's closed-state hiding, so the closed state must hide
+ * children regardless of their display values.
+ */
+.ccm-disclosure {
+  border: thin solid var(--ui-border);
+  border-radius: var(--ui-radius);
+}
+
+.ccm-disclosure:not([open]) > :not(summary) {
+  display: none !important;
+}
+
+.ccm-disclosure-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+}
+
+.ccm-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Marker: a currentcolor triangle that rotates when open (em-sized so it
+ * rides the summary's type size). */
+.ccm-disclosure-summary::before {
+  content: '';
+  flex-shrink: 0;
+  border-block: 0.3em solid transparent;
+  border-inline-start: 0.4em solid currentcolor;
+  transition: transform 0.15s ease;
+}
+
+.ccm-disclosure[open] > .ccm-disclosure-summary::before {
+  transform: rotate(90deg);
+}
+
+.ccm-disclosure-label {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ccm-disclosure-count {
+  padding: 0.2em 0.6em;
+  border-radius: var(--radius-full);
+  background-color: color-mix(in srgb, var(--ui-text-muted) 15%, transparent);
+  color: var(--ui-text-muted);
+  font-weight: 500;
+  line-height: 1.2;
+
+  /* stylelint-disable-next-line custom-property-pattern */
+  font-size: var(--text-step--1);
+}
+
+.ccm-disclosure-content {
+  padding: var(--spacing-2xs) var(--spacing-xs) var(--spacing-xs);
+}
