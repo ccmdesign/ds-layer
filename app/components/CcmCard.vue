@@ -33,6 +33,10 @@ const slots = useSlots()
 const hasHeader = computed(() =>
   Boolean(slots.title || slots.trailing || slots.meta || slots.badges),
 )
+// Only forward a default slot when the consumer passed one — otherwise UCard
+// sees CcmCard's own <slot/> wrapper as content and renders an empty body
+// (stray padding + divide-y rule) on header-only cards (PRO-236).
+const hasBody = computed(() => Boolean(slots.default))
 const hasActions = computed(() => Boolean(slots.actions))
 </script>
 
@@ -57,7 +61,9 @@ const hasActions = computed(() => Boolean(slots.actions))
       </div>
     </template>
 
-    <slot />
+    <template v-if="hasBody" #default>
+      <slot />
+    </template>
 
     <template v-if="hasActions" #footer>
       <div class="ccm-card-actions">

@@ -12,7 +12,7 @@ const UCardStub = {
   template: `
     <div class="u-card-stub" :data-variant="variant">
       <div v-if="$slots.header" class="u-card-stub__header"><slot name="header" /></div>
-      <div class="u-card-stub__body"><slot /></div>
+      <div v-if="$slots.default" class="u-card-stub__body"><slot /></div>
       <div v-if="$slots.footer" class="u-card-stub__footer"><slot name="footer" /></div>
     </div>
   `,
@@ -43,6 +43,14 @@ describe('CcmCard', () => {
     expect(wrapper.find('.u-card-stub__header').exists()).toBe(false)
     expect(wrapper.find('.u-card-stub__footer').exists()).toBe(false)
     expect(wrapper.find('.ccm-card-title-row').exists()).toBe(false)
+  })
+
+  it('renders no body element for a header-only card', () => {
+    const wrapper = mountCard({
+      props: { title: 'Header only', meta: 'no body content' },
+    })
+    expect(wrapper.find('.u-card-stub__header').exists()).toBe(true)
+    expect(wrapper.find('.u-card-stub__body').exists()).toBe(false)
   })
 
   it('forwards the variant and prefers slotted title/meta over props', () => {
