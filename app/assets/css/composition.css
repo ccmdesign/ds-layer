@@ -240,6 +240,12 @@
   grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min), 100%), 1fr));
 }
 
+/* `fill` prop (PRO-236): keep empty tracks so sparse grids hold the column
+ * width instead of stretching the few items across the container. */
+.ccm-grid[data-fill] {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--grid-min), 100%), 1fr));
+}
+
 /* ------------------------------------------------------------------ Frame
  * Chapter 09. `aspect-ratio` (the book's final solution — not the
  * padding-bottom intrinsic-ratio hack) plus centered flex cropping for

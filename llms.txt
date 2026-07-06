@@ -73,6 +73,7 @@ Props:
 - `as` (string, default: "div") — Element (or component) to render.
 - `min` (string (CSS length), default: "calc(var(--measure) / 3)") — Minimum column width; default set in CSS to a third of the measure.
 - `space` (SpaceToken, default: "m") — Utopia space token for the gap.
+- `fill` (boolean, default: "false") — Use auto-fill instead of auto-fit: empty tracks are kept, so a sparse grid holds its column width instead of stretching the items across the row.
 
 Slots:
 - `default` — The grid cells.

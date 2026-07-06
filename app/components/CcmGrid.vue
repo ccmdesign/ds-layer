@@ -20,10 +20,18 @@ const props = withDefaults(defineProps<{
   min?: string
   /** Utopia space token for the gap. Default 'm' (the book's --s1). */
   space?: SpaceToken
+  /**
+   * Use `auto-fill` instead of `auto-fit`: empty tracks are kept, so a
+   * sparse grid (fewer items than columns) holds the column width instead
+   * of stretching the items across the row. The Social House dashboard's
+   * card grid is the motivating case (PRO-236).
+   */
+  fill?: boolean
 }>(), {
   as: 'div',
   min: undefined,
   space: 'm',
+  fill: false,
 })
 
 const style = computed(() => {
@@ -35,7 +43,7 @@ const style = computed(() => {
 </script>
 
 <template>
-  <component :is="as" class="ccm-grid" :style="style">
+  <component :is="as" class="ccm-grid" :data-fill="fill ? '' : undefined" :style="style">
     <slot />
   </component>
 </template>
