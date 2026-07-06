@@ -1,0 +1,71 @@
+diff --git a/spikes/spike-app/app/pages/review.vue b/spikes/spike-app/app/pages/review.vue
+index 66661f1..bb79e7d 100644
+--- a/spikes/spike-app/app/pages/review.vue
++++ b/spikes/spike-app/app/pages/review.vue
+@@ -1,17 +1,9 @@
+ <script setup lang="ts">
+-/**
+- * PRO-233 representative page — RUNNER-BUILT STAND-IN.
+- *
+- * Gate 3 (unprompted agent compliance) could not run in the pipeline
+- * environment (claude CLI auth expired — see docs/solutions/PRO-233-go-no-go.md).
+- * This page was composed by the pipeline runner following skills/ccm-ds
+- * exactly, so Gates 1–2 (cascade + skin fidelity) still judge a real
+- * representative page: form + validation, modal, card grid, composition
+- * primitives. When Gate 3 runs (scripts/gate3-attempt.sh), the agent's page
+- * replaces this file verbatim.
+- */
++// PRO-233 representative page: social-media planning review screen.
++// Composes Nuxt UI (U*) widgets with layer (Ccm*) primitives — see skills/ccm-ds.
+ 
+ const channelItems = ['Instagram', 'LinkedIn', 'YouTube', 'TikTok']
++const CAPTION_MAX = 280
+ 
+ const state = reactive({
+   title: '',
+@@ -24,9 +16,8 @@ type FormError = { name: string, message: string }
+ 
+ function validate(current: typeof state): FormError[] {
+   const errors: FormError[] = []
+-  if (!current.title.trim()) errors.push({ name: 'title', message: 'Give the post a title.' })
+   if (!current.caption.trim()) errors.push({ name: 'caption', message: 'A caption is required.' })
+-  if (current.caption.length > 280) errors.push({ name: 'caption', message: 'Captions max out at 280 characters.' })
++  else if (current.caption.length > CAPTION_MAX) errors.push({ name: 'caption', message: `Captions max out at ${CAPTION_MAX} characters.` })
+   if (!current.channel) errors.push({ name: 'channel', message: 'Pick a channel.' })
+   if (!current.date) errors.push({ name: 'date', message: 'Pick a publish date.' })
+   return errors
+@@ -43,7 +34,7 @@ function confirmSchedule() {
+   confirmOpen.value = false
+   toast.add({
+     title: 'Post scheduled',
+-    description: `“${state.title}” goes out on ${formatDate(state.date)}.`,
++    description: `“${state.title || 'Untitled post'}” goes out on ${formatDate(state.date)}.`,
+     color: 'success',
+   })
+   state.title = ''
+@@ -70,14 +61,14 @@ const posts = [
+       </h1>
+       <UForm :state="state" :validate="validate" @submit="onSubmit">
+         <CcmStack space="s">
+-          <UFormField label="Post title" name="title" required>
++          <UFormField label="Post title" name="title">
+             <UInput v-model="state.title" placeholder="What are we posting?" class="w-full" />
+           </UFormField>
+           <UFormField
+             label="Caption"
+             name="caption"
+             required
+-            :help="`${state.caption.length}/280 characters`"
++            :help="`${state.caption.length}/${CAPTION_MAX} characters`"
+           >
+             <UTextarea v-model="state.caption" :rows="4" placeholder="Write the caption…" class="w-full" />
+           </UFormField>
+@@ -102,7 +93,7 @@ const posts = [
+       <template #body>
+         <CcmStack space="s">
+           <p class="text-step-0">
+-            <strong>{{ state.title }}</strong> will be scheduled.
++            <strong>{{ state.title || 'Untitled post' }}</strong> will be scheduled.
+           </p>
+           <CcmCluster space="s" align="center">
+             <CcmChannelBadge :channel="state.channel" />

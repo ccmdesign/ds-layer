@@ -1,0 +1,266 @@
+diff --git a/spikes/spike-app/app/pages/review.vue b/spikes/spike-app/app/pages/review.vue
+index 66661f1..c229c51 100644
+--- a/spikes/spike-app/app/pages/review.vue
++++ b/spikes/spike-app/app/pages/review.vue
+@@ -1,58 +1,48 @@
+ <script setup lang="ts">
+-/**
+- * PRO-233 representative page — RUNNER-BUILT STAND-IN.
+- *
+- * Gate 3 (unprompted agent compliance) could not run in the pipeline
+- * environment (claude CLI auth expired — see docs/solutions/PRO-233-go-no-go.md).
+- * This page was composed by the pipeline runner following skills/ccm-ds
+- * exactly, so Gates 1–2 (cascade + skin fidelity) still judge a real
+- * representative page: form + validation, modal, card grid, composition
+- * primitives. When Gate 3 runs (scripts/gate3-attempt.sh), the agent's page
+- * replaces this file verbatim.
+- */
+-
+-const channelItems = ['Instagram', 'LinkedIn', 'YouTube', 'TikTok']
+-
+-const state = reactive({
+-  title: '',
+-  caption: '',
+-  channel: undefined as string | undefined,
+-  date: '',
+-})
+-
+-type FormError = { name: string, message: string }
+-
+-function validate(current: typeof state): FormError[] {
++import type { FormError, FormSubmitEvent } from '@nuxt/ui'
++
++const CHANNELS = ['Instagram', 'LinkedIn', 'YouTube', 'TikTok']
++const CAPTION_MAX = 280
++
++type PostForm = {
++  title: string
++  caption: string
++  channel?: string
++  publishDate: string
++}
++
++const emptyForm = (): PostForm => ({ title: '', caption: '', channel: undefined, publishDate: '' })
++const state = reactive<PostForm>(emptyForm())
++
++// Native maxlength hard-caps the caption at 280, so validation only guards the
++// required fields; the counter shows headroom.
++const validate = (s: PostForm): FormError[] => {
+   const errors: FormError[] = []
+-  if (!current.title.trim()) errors.push({ name: 'title', message: 'Give the post a title.' })
+-  if (!current.caption.trim()) errors.push({ name: 'caption', message: 'A caption is required.' })
+-  if (current.caption.length > 280) errors.push({ name: 'caption', message: 'Captions max out at 280 characters.' })
+-  if (!current.channel) errors.push({ name: 'channel', message: 'Pick a channel.' })
+-  if (!current.date) errors.push({ name: 'date', message: 'Pick a publish date.' })
++  if (!s.caption.trim()) errors.push({ name: 'caption', message: 'Caption is required.' })
++  if (!s.publishDate) errors.push({ name: 'publishDate', message: 'Publish date is required.' })
+   return errors
+ }
+ 
+-const confirmOpen = ref(false)
++const showConfirm = ref(false)
+ const toast = useToast()
+ 
+-function onSubmit() {
+-  confirmOpen.value = true
++function onSubmit(_event: FormSubmitEvent<PostForm>) {
++  showConfirm.value = true
+ }
+ 
+ function confirmSchedule() {
+-  confirmOpen.value = false
++  showConfirm.value = false
+   toast.add({
+     title: 'Post scheduled',
+-    description: `“${state.title}” goes out on ${formatDate(state.date)}.`,
++    description: `"${state.title || 'Untitled post'}" is on the calendar.`,
+     color: 'success',
++    icon: 'i-lucide-calendar-check',
+   })
+-  state.title = ''
+-  state.caption = ''
+-  state.channel = undefined
+-  state.date = ''
++  Object.assign(state, emptyForm())
+ }
+ 
+-const posts = [
++// ponytail: static planned posts — the spike shows the grid, not a data layer.
++const plannedPosts = [
+   { title: 'Spring launch teaser', channel: 'Instagram', status: 'scheduled', date: '2026-07-08' },
+   { title: 'Founder AMA recap', channel: 'LinkedIn', status: 'draft', date: '2026-07-10' },
+   { title: 'Behind the scenes reel', channel: 'Instagram', status: 'scheduled', date: '2026-07-12' },
+@@ -63,90 +53,105 @@ const posts = [
+ </script>
+ 
+ <template>
+-  <CcmStack as="main" space="xl" class="mx-auto max-w-5xl px-4 py-l">
+-    <CcmStack as="section" space="m" data-testid="schedule-form">
++  <CcmStack as="main" space="xl" class="mx-auto max-w-5xl px-4 py-xl">
++    <CcmStack space="2xs">
+       <h1 class="text-step-3 font-semibold">
+-        Schedule a post
++        Review &amp; schedule
+       </h1>
+-      <UForm :state="state" :validate="validate" @submit="onSubmit">
+-        <CcmStack space="s">
+-          <UFormField label="Post title" name="title" required>
+-            <UInput v-model="state.title" placeholder="What are we posting?" class="w-full" />
+-          </UFormField>
+-          <UFormField
+-            label="Caption"
+-            name="caption"
+-            required
+-            :help="`${state.caption.length}/280 characters`"
+-          >
+-            <UTextarea v-model="state.caption" :rows="4" placeholder="Write the caption…" class="w-full" />
+-          </UFormField>
+-          <CcmSwitcher threshold="m" space="s">
+-            <UFormField label="Channel" name="channel" required>
+-              <USelect v-model="state.channel" :items="channelItems" placeholder="Select a channel" class="w-full" />
+-            </UFormField>
+-            <UFormField label="Publish date" name="date" required>
+-              <UInput v-model="state.date" type="date" class="w-full" />
+-            </UFormField>
+-          </CcmSwitcher>
+-          <CcmCluster space="s" justify="end">
+-            <UButton type="submit" data-testid="submit-post">
+-              Schedule post
+-            </UButton>
+-          </CcmCluster>
+-        </CcmStack>
+-      </UForm>
++      <p class="text-muted text-step-0">
++        Draft a post, confirm the details, and track what's planned.
++      </p>
+     </CcmStack>
+ 
+-    <UModal v-model:open="confirmOpen" title="Schedule this post?" data-testid="confirm-modal">
++    <UForm :state="state" :validate="validate" @submit="onSubmit">
++      <CcmStack space="m">
++        <UFormField label="Post title" name="title">
++          <UInput v-model="state.title" placeholder="Spring launch teaser" class="w-full" />
++        </UFormField>
++
++        <UFormField
++          label="Caption"
++          name="caption"
++          required
++          :hint="`${state.caption.length}/${CAPTION_MAX}`"
++        >
++          <UTextarea
++            v-model="state.caption"
++            :maxlength="CAPTION_MAX"
++            :rows="4"
++            placeholder="What are you announcing?"
++            class="w-full"
++          />
++        </UFormField>
++
++        <UFormField label="Channel" name="channel">
++          <USelect v-model="state.channel" :items="CHANNELS" placeholder="Pick a channel" class="w-full" />
++        </UFormField>
++
++        <UFormField label="Publish date" name="publishDate" required>
++          <UInput v-model="state.publishDate" type="date" class="w-full" />
++        </UFormField>
++
++        <CcmCluster space="s">
++          <UButton type="submit">
++            Schedule a post
++          </UButton>
++        </CcmCluster>
++      </CcmStack>
++    </UForm>
++
++    <CcmStack as="section" space="m">
++      <h2 class="text-step-2 font-semibold">
++        Planned posts
++      </h2>
++      <CcmGrid min="16rem" space="m">
++        <UCard v-for="post in plannedPosts" :key="post.title">
++          <CcmStack space="s">
++            <h3 class="text-step-1 font-medium">
++              {{ post.title }}
++            </h3>
++            <CcmCluster space="xs" align="center">
++              <CcmChannelBadge :channel="post.channel" />
++              <CcmStatusBadge :status="post.status" />
++            </CcmCluster>
++            <p class="text-muted text-step-0">
++              {{ formatDate(post.date, { style: 'long' }) }}
++            </p>
++          </CcmStack>
++        </UCard>
++      </CcmGrid>
++    </CcmStack>
++
++    <UModal v-model:open="showConfirm" title="Confirm schedule">
+       <template #body>
+         <CcmStack space="s">
+           <p class="text-step-0">
+-            <strong>{{ state.title }}</strong> will be scheduled.
+-          </p>
+-          <CcmCluster space="s" align="center">
+-            <CcmChannelBadge :channel="state.channel" />
+-            <span class="text-muted text-step-0">{{ formatDate(state.date) }}</span>
+-          </CcmCluster>
+-          <p class="text-muted text-step-0">
+-            {{ state.caption }}
++            You're about to schedule:
+           </p>
++          <CcmStack space="2xs">
++            <p class="font-medium">
++              {{ state.title || 'Untitled post' }}
++            </p>
++            <CcmCluster space="xs" align="center">
++              <CcmChannelBadge v-if="state.channel" :channel="state.channel" />
++              <span class="text-muted text-step--1">{{ formatDate(state.publishDate, { style: 'long' }) }}</span>
++            </CcmCluster>
++            <p class="text-muted text-step-0">
++              {{ state.caption }}
++            </p>
++          </CcmStack>
+         </CcmStack>
+       </template>
+-      <template #footer>
+-        <CcmCluster space="s" justify="end" class="w-full">
+-          <UButton color="neutral" variant="ghost" data-testid="cancel-schedule" @click="confirmOpen = false">
++      <template #footer="{ close }">
++        <CcmCluster space="s" justify="flex-end" class="w-full">
++          <UButton color="neutral" variant="outline" @click="close">
+             Cancel
+           </UButton>
+-          <UButton data-testid="confirm-schedule" @click="confirmSchedule">
++          <UButton color="primary" @click="confirmSchedule">
+             Confirm
+           </UButton>
+         </CcmCluster>
+       </template>
+     </UModal>
+-
+-    <CcmStack as="section" space="m" data-testid="planned-posts">
+-      <h2 class="text-step-2 font-semibold">
+-        Planned posts
+-      </h2>
+-      <CcmGrid as="ul" min="16rem" space="m" class="list-none p-0">
+-        <li v-for="post in posts" :key="post.title">
+-          <UCard>
+-            <CcmStack space="xs">
+-              <CcmCluster space="2xs" align="center">
+-                <CcmChannelBadge :channel="post.channel" />
+-                <CcmStatusBadge :status="post.status" />
+-              </CcmCluster>
+-              <h3 class="text-step-1 font-medium">
+-                {{ post.title }}
+-              </h3>
+-              <p class="text-muted text-step-0">
+-                {{ formatDate(post.date) }}
+-              </p>
+-            </CcmStack>
+-          </UCard>
+-        </li>
+-      </CcmGrid>
+-    </CcmStack>
+   </CcmStack>
+ </template>

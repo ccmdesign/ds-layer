@@ -2,22 +2,22 @@
 
 Date: 2026-07-05 · Branch: `feature/PRO-233-validation-spike-three-gates`
 Plan: `docs/plans/PRO-233-plan.md` · Parent: PRO-226
+Re-issued: 2026-07-06 — Gate 3 run after claude CLI auth was restored.
 
 ## Verdict
 
-**NO-GO (BLOCKED) — DS-8 stays blocked.**
+**GO — all three gates pass. DS-8 (Social House adoption) is unblocked.**
 
 - Gate 1 (cascade coexistence): **PASS**
 - Gate 2 (skin fidelity): **PASS** — with the stand-in caveat below
-- Gate 3 (unprompted agent compliance): **NOT RUN** — environment failure
-  (claude CLI auth), not a failure on the merits
+- Gate 3 (unprompted agent compliance): **PASS** — 2/2 attempts lint-clean
+  with zero human corrections (see Gate 3 below)
 
-No gate failed on the merits, so the fallback ladder (shadcn-vue / Reka UI +
-owned CSS) does **not** re-open. But the kill-switch question this ticket
-exists to answer — does an unprompted agent produce compliant UI on this
-stack? — is still open, so DS-8 must not start. Re-running Gate 3 is one
-command per attempt once `claude` auth is restored (see Gate 3 below); the
-verdict should then be re-issued on this ticket.
+History: the 2026-07-05 pipeline run issued **NO-GO (BLOCKED)** because Gate 3
+could not run (headless claude CLI auth failure — an environment failure, not
+a failure on the merits; the fallback ladder never re-opened). Auth was
+restored interactively on 2026-07-06 and both Gate 3 attempts were executed
+per the committed protocol, upgrading the verdict to GO.
 
 ## The spike
 
@@ -102,34 +102,34 @@ Nuxt UI restyling produce the Social House look on a real composed page) —
 it does not prove agent behavior. The stand-in passes the full DS-6 lint
 gate with zero violations.
 
-## Gate 3 — Unprompted agent compliance: NOT RUN
+## Gate 3 — Unprompted agent compliance: PASS (2/2 attempts, re-run 2026-07-06)
 
-Reason: the `claude` CLI cannot authenticate headlessly on this machine.
+Protocol (`scripts/gate3-attempt.sh <n>`): reset the spike app to the bare
+scaffold (stand-in page removed), run `claude -p` with the fixed product brief
+(`PRO-233-gate3/brief.txt` — names no components, no lint rules, no docs),
+then run the DS-6 gates verbatim, zero human corrections. Evidence per attempt
+(transcript, diff, lint JSON, build log) in `PRO-233-gate3/attempt-<n>/`.
 
-- PATH CLI (2.1.162, homebrew): stored claude.ai OAuth token expired
-  2026-06-28; headless refresh returns
-  `API Error: 401 Invalid authentication credentials` (verified with clean
-  env, with `--setting-sources project`, and against both the configured
-  local headroom proxy and `api.anthropic.com`).
-- Desktop-bundled CLI (2.1.197): separate credential store, "Not logged in".
-- No `ANTHROPIC_API_KEY` anywhere on the machine; `claude auth login` is
-  interactive-only, which an autonomous run must not fake.
-- First attempt transcript: `PRO-233-gate3/attempt-1-notrun-auth-failure.txt`.
+| attempt | eslint errors | stylelint violations | build | files authored |
+|---------|--------------|----------------------|-------|----------------|
+| 1 | 0 | 0 | pass | `app/pages/review.vue` |
+| 2 | 0 | 0 | pass | `app/pages/review.vue` |
 
-Per the ticket's protocol, this is recorded as NOT RUN — no substitute agent
-was used and no compliance numbers were invented.
+Both attempts: the agent, steered only by `skills/ccm-ds` + `AGENTS.md`,
+composed the page from Nuxt UI widgets + Ccm primitives and passed every DS-6
+lint gate unaided. Violations per attempt: **0 and 0**.
 
-**The harness is committed and ready:** `scripts/gate3-attempt.sh <n>` resets
-the spike app to the bare scaffold (removing the stand-in page), runs
-`claude -p` with the fixed product brief (`PRO-233-gate3/brief.txt` — names no
-components, no lint rules, no docs), then runs the DS-6 gates verbatim and
-writes transcript, diff, per-gate violation counts to
-`PRO-233-gate3/attempt-<n>/`. Protocol: ≥2 attempts, zero human corrections,
-every attempt must lint clean.
+Note on the summary.txt "stylelint errors: ?" quirk: stylelint's JSON
+formatter writes to stderr, so the script's stdout-based counter shows `?`;
+the counts above were read from `attempt-<n>/stylelint.stderr.txt`
+(3 files each, `errored: false`, `warnings: []`). Stylelint exit code 0 in
+both attempts.
 
-To close the gate: `claude auth login`, then
-`bash scripts/gate3-attempt.sh 1 && bash scripts/gate3-attempt.sh 2`, commit
-the evidence, re-issue the verdict on PRO-233.
+History (2026-07-05 pipeline run): NOT RUN — the stored claude.ai OAuth token
+had expired 2026-06-28 and headless refresh returned 401; no API key existed
+on the machine, `claude auth login` is interactive-only, and the run correctly
+refused to fake compliance numbers
+(`PRO-233-gate3/attempt-1-notrun-auth-failure.txt`).
 
 ## Verification (local, clean install)
 
@@ -140,8 +140,8 @@ the evidence, re-issue the verdict on PRO-233.
 
 ## Residuals
 
-1. **Re-run Gate 3** after restoring claude CLI auth (one command per
-   attempt, above) and re-issue the go/no-go verdict on this ticket.
+1. ~~Re-run Gate 3 and re-issue the verdict~~ — **done 2026-07-06**, verdict
+   re-issued as GO (this revision).
 2. Append this report to the Decisions Proof doc
    (https://proofeditor.ai/d/usd6lwl4) — external doc, not writable from the
    pipeline.
