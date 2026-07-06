@@ -19,3 +19,6 @@ node_modules
 
 # Local tooling
 .claude/launch.json
+
+# Local Netlify folder
+.netlify
