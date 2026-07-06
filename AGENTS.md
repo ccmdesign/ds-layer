@@ -11,7 +11,11 @@ the `@ccm/ds` layer. The machine-readable component inventory is
    layer (`Ccm*`) components together and passes props. It does not build
    widgets or layouts out of raw markup and utility soup. Raw
    `button/input/select/table/dialog` elements are lint errors
-   (`ccm/no-bespoke-widgets`) — Nuxt UI owns the widgets.
+   (`ccm/no-bespoke-widgets`). Wrappers compose `U*` components or native
+   elements — never re-implement their behavior: a `Ccm*` wrapper earns its
+   existence by encoding STRUCTURE or BEHAVIOR (CcmCard over UCard,
+   CcmDisclosure over `details/summary`), never style alone — style-only
+   differences belong in the `app.config.ts` theme slots.
 2. **Class strings live only inside Tailwind Variants definitions**, i.e. in
    component files. Outside `components/`, static `class` attributes carry a
    utility budget of 6 (`ccm/class-budget`). Over budget means you found a

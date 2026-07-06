@@ -71,10 +71,14 @@ const classBudget = {
 /**
  * ccm/no-bespoke-widgets
  *
- * Doctrine: don't rebuild widgets the system already owns. Raw
+ * Doctrine (PRO-235 wording): wrappers must COMPOSE Nuxt UI `U*` components
+ * or native elements — never re-implement their behavior. Raw
  * button/input/select/table/dialog elements in a template are the start of a
- * bespoke widget; Nuxt UI ships the accessible, themed version. Escape hatch
- * for the rare legitimate case: an eslint-disable comment with a reason.
+ * bespoke widget; Nuxt UI ships the accessible, themed version. A `Ccm*`
+ * wrapper that encodes structure or behavior on TOP of a `U*` component or a
+ * native element (CcmCard over UCard, CcmDisclosure over details/summary) is
+ * legitimate; one that rebuilds a widget's behavior is not. Escape hatch for
+ * the rare legitimate raw element: an eslint-disable comment with a reason.
  *
  * Only raw (lowercase) HTML elements are flagged — <UButton> or a local
  * <Button> component resolve differently in the AST (rawName casing) and
@@ -92,7 +96,7 @@ const noBespokeWidgets = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'disallow raw button/input/select/table/dialog elements (widget-duplication rule) — Nuxt UI owns the widgets',
+      description: 'disallow raw button/input/select/table/dialog elements — wrappers compose U* components or native elements, never re-implement their behavior',
     },
     schema: [],
     messages: {

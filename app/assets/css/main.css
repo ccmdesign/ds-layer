@@ -2,10 +2,12 @@
 @import "@nuxt/ui";
 @import "./tokens.css";
 @import "./composition.css" layer(components);
+@import "./wrappers.css" layer(components);
 
 /*
  * @ccm/ds layer stylesheet.
  * tokens.css is GENERATED from the DTCG source in tokens/ (pnpm build:tokens).
- * composition.css holds the Every Layout primitives (PRO-229), registered in
- * Tailwind v4's components cascade layer via the layer() import above.
+ * composition.css holds the Every Layout primitives (PRO-229), and
+ * wrappers.css the adoption wrappers (PRO-235); both are registered in
+ * Tailwind v4's components cascade layer via the layer() imports above.
  */
