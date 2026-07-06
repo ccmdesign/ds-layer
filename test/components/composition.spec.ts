@@ -135,6 +135,11 @@ describe('CcmGrid', () => {
     expect(style).toContain('--grid-min: 15rem')
     expect(style).toContain('--grid-space: var(--spacing-2xl)')
   })
+
+  it('keeps auto-fit by default and flags auto-fill via data attribute', () => {
+    expect(mount(CcmGrid).attributes('data-fill')).toBeUndefined()
+    expect(mount(CcmGrid, { props: { fill: true } }).attributes('data-fill')).toBe('')
+  })
 })
 
 describe('CcmFrame', () => {

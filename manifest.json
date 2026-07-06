@@ -66,7 +66,8 @@
       "props": [
         { "name": "as", "type": "string", "default": "div", "description": "Element (or component) to render." },
         { "name": "min", "type": "string (CSS length)", "default": "calc(var(--measure) / 3)", "description": "Minimum column width; default set in CSS to a third of the measure." },
-        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." }
+        { "name": "space", "type": "SpaceToken", "default": "m", "description": "Utopia space token for the gap." },
+        { "name": "fill", "type": "boolean", "default": "false", "description": "Use auto-fill instead of auto-fit: empty tracks are kept, so a sparse grid holds its column width instead of stretching the items across the row." }
       ],
       "variants": { "space": "SpaceToken" },
       "slots": [{ "name": "default", "description": "The grid cells." }],
