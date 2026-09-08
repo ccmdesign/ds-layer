@@ -1,4 +1,0 @@
-/* FIXTURE (must FAIL color-no-hex): raw hex instead of a token. */
-.fixture-raw-hex {
-  color: #4f46e5;
-}

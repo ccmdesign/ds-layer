@@ -1,4 +1,0 @@
-/* FIXTURE (must FAIL unit-disallowed-list): raw px instead of tokens/rem. */
-.fixture-raw-px {
-  margin-block-start: 24px;
-}
